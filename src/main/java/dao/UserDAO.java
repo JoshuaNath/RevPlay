@@ -1,0 +1,79 @@
+package dao;
+
+import model.User;
+import util.DBConnection;
+
+import java.sql.*;
+
+public class UserDAO {
+
+    public void registerListener(String u, String p, String e, String n) throws Exception {
+        Connection con = DBConnection.getConnection();
+
+        PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO users(username,password_hash,email,full_name,user_type) VALUES (?,?,?,?, 'LISTENER')",
+                new String[]{"id"});
+        ps.setString(1, u);
+        ps.setString(2, p);
+        ps.setString(3, e);
+        ps.setString(4, n);
+        ps.executeUpdate();
+
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        int userId = rs.getInt(1);
+
+        PreparedStatement pls = con.prepareStatement(
+                "INSERT INTO listeners(user_id) VALUES (?)");
+        pls.setInt(1, userId);
+        pls.executeUpdate();
+
+        con.close();
+    }
+
+    public void registerArtist(String u, String p, String e, String n,
+                               String artistName, String genre) throws Exception {
+
+        Connection con = DBConnection.getConnection();
+
+        PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO users(username,password_hash,email,full_name,user_type) VALUES (?,?,?,?, 'ARTIST')",
+                new String[]{"id"});
+        ps.setString(1, u);
+        ps.setString(2, p);
+        ps.setString(3, e);
+        ps.setString(4, n);
+        ps.executeUpdate();
+
+        ResultSet rs = ps.getGeneratedKeys();
+        rs.next();
+        int userId = rs.getInt(1);
+
+        PreparedStatement pa = con.prepareStatement(
+                "INSERT INTO artists(user_id,artist_name,genre) VALUES (?,?,?)");
+        pa.setInt(1, userId);
+        pa.setString(2, artistName);
+        pa.setString(3, genre);
+        pa.executeUpdate();
+
+        con.close();
+    }
+
+    public User login(String u, String p) throws Exception {
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT id,user_type FROM users WHERE username=? AND password_hash=?");
+        ps.setString(1, u);
+        ps.setString(2, p);
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            User user = new User();
+            user.id = rs.getInt("id");
+            user.username = u;
+            user.role = rs.getString("user_type");
+            return user;
+        }
+        return null;
+    }
+}
