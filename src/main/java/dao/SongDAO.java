@@ -75,5 +75,54 @@ public class SongDAO {
             }
         }
     }
+    
+    public Integer getNextSongId(int currentSongId) throws Exception {
+        String sql = """
+            SELECT id FROM songs
+            WHERE id > ?
+            ORDER BY id
+            FETCH FIRST 1 ROWS ONLY
+        """;
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, currentSongId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            return null;
+        }
+    }
+    
+    
+    public void listSongsByArtist(int artistId) throws Exception {
+        String sql = "SELECT id, title FROM songs WHERE artist_id = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, artistId);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n🎤 Your Songs:");
+            boolean found = false;
+
+            while (rs.next()) {
+                found = true;
+                System.out.println(
+                    rs.getInt("id") + " - " + rs.getString("title")
+                );
+            }
+
+            if (!found) {
+                System.out.println("No songs uploaded yet.");
+            }
+        }
+    }
+
+
 
 }
