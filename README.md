@@ -1,74 +1,22 @@
-erDiagram
+RevPlay – Java Console Music Streaming Application
 
-    USERS {
-        NUMBER id PK
-        VARCHAR username
-        VARCHAR password_hash
-        VARCHAR email
-        VARCHAR user_type
-    }
+RevPlay is a Java 17 console-based music streaming application built using JDBC and Oracle XE, designed to demonstrate real-world backend development principles. The application simulates core features of a music platform, including user authentication, song playback, playlist management, and role-based access for listeners and artists.
+The project follows a clean layered architecture (UI, Service, DAO, Database), ensuring separation of concerns, maintainability, and scalability. All data is persisted in an Oracle database with enforced constraints to maintain integrity.
 
-    LISTENERS {
-        NUMBER user_id PK
-        VARCHAR subscription_type
-    }
+Key Highlights:
+Role-based system: Listeners and Artists
+Song upload and playback simulation
+Playlist creation and management
+Listening history tracking
+JDBC-based data access with Oracle XE
+Clean, modular, interview-ready architecture
 
-    ARTISTS {
-        NUMBER user_id PK
-        VARCHAR artist_name
-        VARCHAR genre
-    }
+Tech Stack:
+Java 17
+JDBC
+Oracle XE
+Maven
+JUnit 5
+Git
 
-    SONGS {
-        NUMBER id PK
-        NUMBER artist_id FK
-        VARCHAR title
-        NUMBER duration_seconds
-    }
-
-    PLAYLISTS {
-        NUMBER id PK
-        NUMBER listener_id FK
-        VARCHAR name
-        NUMBER is_public
-    }
-
-    PLAYLIST_SONGS {
-        NUMBER playlist_id PK
-        NUMBER song_id PK
-    }
-
-    LISTENING_HISTORY {
-        NUMBER id PK
-        NUMBER listener_id FK
-        NUMBER song_id FK
-        TIMESTAMP played_at
-    }
-
-    USERS ||--|| LISTENERS : "is"
-    USERS ||--|| ARTISTS : "is"
-
-    ARTISTS ||--o{ SONGS : uploads
-    LISTENERS ||--o{ PLAYLISTS : creates
-    PLAYLISTS ||--o{ PLAYLIST_SONGS : contains
-    SONGS ||--o{ PLAYLIST_SONGS : added_to
-    LISTENERS ||--o{ LISTENING_HISTORY : plays
-    SONGS ||--o{ LISTENING_HISTORY : tracked_in
-
-    
-    
-    
-    
-    
-    
-   flowchart TB
-
-    UI[MainApp\n(Console UI)]
-    SERVICE[Service Layer\n(AuthService, MusicService, PlaylistService)]
-    DAO[DAO Layer\n(UserDAO, SongDAO, PlaylistDAO)]
-    DB[(Oracle Database)]
-
-    UI --> SERVICE
-    SERVICE --> DAO
-    DAO --> DB
-    
+RevPlay is a backend-focused project intended to showcase strong fundamentals in Java, SQL, JDBC, and application architecture, making it suitable for Java backend and software engineer roles.
