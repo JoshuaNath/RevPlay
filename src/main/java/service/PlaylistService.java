@@ -10,7 +10,7 @@ public class PlaylistService {
     public void create(int userId, Scanner sc) throws Exception {
         System.out.print("Playlist Name: ");
         dao.createPlaylist(userId, sc.nextLine());
-        System.out.println("📁 Playlist created");
+        System.out.println("Playlist created");
     }
 
     public void viewMyPlaylists(int userId) throws Exception {
@@ -25,7 +25,7 @@ public class PlaylistService {
         int sid = Integer.parseInt(sc.nextLine());
 
         dao.addSongToPlaylist(pid, sid);
-        System.out.println("🎵 Song added to playlist");
+        System.out.println("Song added to playlist");
     }
 
     public void viewPublicPlaylists() throws Exception {

@@ -60,7 +60,7 @@ public class SongDAO {
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            System.out.println("\n🎶 Available Songs:");
+            System.out.println("\nAvailable Songs:");
             boolean found = false;
 
             while (rs.next()) {

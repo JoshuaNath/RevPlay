@@ -17,11 +17,11 @@ public class MusicService {
 
             Song s = dao.getSong(currentSongId);
             if (s == null) {
-                System.out.println("❌ Song not found.");
+                System.out.println("Song not found.");
                 return;
             }
 
-            System.out.println("\n▶ Now Playing: " + s.title);
+            System.out.println("\nNow Playing: " + s.title);
             System.out.println("Press 1 anytime to Pause");
 
             int totalSeconds = s.duration;
@@ -39,17 +39,17 @@ public class MusicService {
 
                     if ("1".equals(input)) {
                         // PAUSED
-                        System.out.println("\n⏸ Paused");
+                        System.out.println("\nPaused");
                         int action = pausedMenu(sc);
 
                         switch (action) {
                             case 1 -> {
-                                System.out.println("▶ Resumed");
+                                System.out.println("Resumed");
                             }
                             case 2 -> {
                                 Integer nextSongId = dao.getNextSongId(currentSongId);
                                 if (nextSongId == null) {
-                                    System.out.println("⛔ No next song available");
+                                    System.out.println("No next song available");
                                     dao.recordPlay(currentSongId, userId);
                                     return;
                                 }
@@ -59,7 +59,7 @@ public class MusicService {
                                 continue;
                             }
                             case 3 -> {
-                                System.out.println("🔁 Replaying");
+                                System.out.println("Replaying");
                                 elapsedSeconds = 0;
                             }
                             case 4 -> {
@@ -73,7 +73,7 @@ public class MusicService {
 
             // Song finished naturally
             dao.recordPlay(currentSongId, userId);
-            System.out.println("\n✅ Song finished");
+            System.out.println("\nSong finished");
 
             Integer nextSongId = dao.getNextSongId(currentSongId);
             if (nextSongId == null) {

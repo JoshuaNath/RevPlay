@@ -44,7 +44,7 @@ public class PlaylistDAO {
         }
     }
 
-    // 🔹 HELPER METHOD (THIS WAS MISSING)
+    //  Song is already in playlist
     public boolean isSongAlreadyInPlaylist(int playlistId, int songId) throws Exception {
         String sql = """
             SELECT COUNT(*)
@@ -120,9 +120,9 @@ public class PlaylistDAO {
             int rows = ps.executeUpdate();
 
             if (rows == 0) {
-                System.out.println("❌ Playlist not found or not owned by you.");
+                System.out.println("Playlist not found or not owned by you.");
             } else {
-                System.out.println("🗑 Playlist deleted.");
+                System.out.println("Playlist deleted.");
             }
         }
     }

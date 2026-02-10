@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RevPlayTest {
 
     @Test
-    void loginTest() throws Exception {
+    void loginTest(){
         AuthService auth = new AuthService();
         assertNotNull(auth);
     }
@@ -34,7 +34,7 @@ public class RevPlayTest {
     }
     
     @Test
-    void playlistServiceCreationTest() {
+    void playlistServiceCreationTest(){
         PlaylistService playlistService = new PlaylistService();
         assertNotNull(playlistService);
     }

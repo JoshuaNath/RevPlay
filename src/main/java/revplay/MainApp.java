@@ -16,7 +16,7 @@ public class MainApp {
         PlaylistService playlist = new PlaylistService();
 
         while (true) {
-            System.out.println("\n🎵 REVPLAY 🎵");
+            System.out.println("\nREVPLAY ");
             System.out.println("1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
@@ -30,7 +30,7 @@ public class MainApp {
 
                 User user = auth.login(sc);
                 if (user == null) {
-                    System.out.println("❌ Invalid login");
+                    System.out.println("Invalid login");
                     continue;
                 }
 
@@ -60,7 +60,7 @@ public class MainApp {
                             case 3 -> playlistMenu(sc, playlist, user.id);
 
                             case 4 -> {
-                                System.out.println("👋 Logged out");
+                                System.out.println("Logged out");
                                 break;
                             }
 
@@ -90,13 +90,13 @@ public class MainApp {
                             int duration = Integer.parseInt(sc.nextLine());
 
                             songDAO.uploadSong(user.id, title, duration);
-                            System.out.println("✅ Song uploaded successfully");
+                            System.out.println("Song uploaded successfully");
                         }
                         else if (c == 2) {
                             songDAO.listSongsByArtist(user.id);
                         }
                         else {
-                            System.out.println("👋 Logged out");
+                            System.out.println("Logged out");
                             break;
                         }
                     }
@@ -115,7 +115,7 @@ public class MainApp {
             int userId) throws Exception {
 
         while (true) {
-            System.out.println("\n📂 Playlist Menu");
+            System.out.println("\nPlaylist Menu");
             System.out.println("1. Create Playlist");
             System.out.println("2. View My Playlists");
             System.out.println("3. Add Song to Playlist");

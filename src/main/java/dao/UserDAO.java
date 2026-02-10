@@ -7,16 +7,29 @@ import java.sql.*;
 
 public class UserDAO {
 
-    public void registerListener(String u, String p, String e, String n) throws Exception {
+    // ================= REGISTER LISTENER =================
+    public void registerListener(
+            String u, String p, String e, String n,
+            String question, String answer) throws Exception {
+
         Connection con = DBConnection.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO users(username,password_hash,email,full_name,user_type) VALUES (?,?,?,?, 'LISTENER')",
-                new String[]{"id"});
+                """
+                INSERT INTO users
+                (username, password_hash, email, full_name, user_type,
+                 security_question, security_answer)
+                VALUES (?, ?, ?, ?, 'LISTENER', ?, ?)
+                """,
+                new String[]{"id"}
+        );
+
         ps.setString(1, u);
         ps.setString(2, p);
         ps.setString(3, e);
         ps.setString(4, n);
+        ps.setString(5, question);
+        ps.setString(6, answer);
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();
@@ -31,18 +44,30 @@ public class UserDAO {
         con.close();
     }
 
-    public void registerArtist(String u, String p, String e, String n,
-                               String artistName, String genre) throws Exception {
+    // ================= REGISTER ARTIST =================
+    public void registerArtist(
+            String u, String p, String e, String n,
+            String artistName, String genre,
+            String question, String answer) throws Exception {
 
         Connection con = DBConnection.getConnection();
 
         PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO users(username,password_hash,email,full_name,user_type) VALUES (?,?,?,?, 'ARTIST')",
-                new String[]{"id"});
+                """
+                INSERT INTO users
+                (username, password_hash, email, full_name, user_type,
+                 security_question, security_answer)
+                VALUES (?, ?, ?, ?, 'ARTIST', ?, ?)
+                """,
+                new String[]{"id"}
+        );
+
         ps.setString(1, u);
         ps.setString(2, p);
         ps.setString(3, e);
         ps.setString(4, n);
+        ps.setString(5, question);
+        ps.setString(6, answer);
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();
@@ -50,7 +75,7 @@ public class UserDAO {
         int userId = rs.getInt(1);
 
         PreparedStatement pa = con.prepareStatement(
-                "INSERT INTO artists(user_id,artist_name,genre) VALUES (?,?,?)");
+                "INSERT INTO artists(user_id, artist_name, genre) VALUES (?,?,?)");
         pa.setInt(1, userId);
         pa.setString(2, artistName);
         pa.setString(3, genre);
@@ -59,21 +84,34 @@ public class UserDAO {
         con.close();
     }
 
-    public User login(String u, String p) throws Exception {
+    // ================= FETCH USER =================
+    public User getUserByUsername(String u) throws Exception {
+
         Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(
-                "SELECT id,user_type FROM users WHERE username=? AND password_hash=?");
+                """
+                SELECT id, username, password_hash, user_type,
+                       security_question, security_answer
+                FROM users
+                WHERE username = ?
+                """
+        );
         ps.setString(1, u);
-        ps.setString(2, p);
 
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             User user = new User();
             user.id = rs.getInt("id");
-            user.username = u;
+            user.username = rs.getString("username");
+            user.password = rs.getString("password_hash");
             user.role = rs.getString("user_type");
+            user.securityQuestion = rs.getString("security_question");
+            user.securityAnswer = rs.getString("security_answer");
+            con.close();
             return user;
         }
+
+        con.close();
         return null;
     }
 }
