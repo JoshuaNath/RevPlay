@@ -30,7 +30,7 @@ public class PlaylistDAO {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
-            System.out.println("\n📂 My Playlists:");
+            System.out.println("\nMy Playlists:");
             boolean found = false;
 
             while (rs.next()) {
@@ -68,7 +68,7 @@ public class PlaylistDAO {
     public void addSongToPlaylist(int playlistId, int songId) throws Exception {
 
         if (isSongAlreadyInPlaylist(playlistId, songId)) {
-            System.out.println("⚠️ Song already exists in this playlist.");
+            System.out.println("Song already exists in this playlist.");
             return;
         }
 
@@ -80,7 +80,7 @@ public class PlaylistDAO {
             ps.setInt(1, playlistId);
             ps.setInt(2, songId);
             ps.executeUpdate();
-            System.out.println("🎵 Song added to playlist");
+            System.out.println("Song added to playlist");
         }
     }
 
@@ -93,7 +93,7 @@ public class PlaylistDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            System.out.println("\n🌍 Public Playlists:");
+            System.out.println("\nPublic Playlists:");
             boolean found = false;
 
             while (rs.next()) {

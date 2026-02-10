@@ -21,7 +21,7 @@ public class MusicService {
                 return;
             }
 
-            System.out.println("\nNow Playing: " + s.title);
+            System.out.println("\n▶ Now Playing: " + s.title);
             System.out.println("Press 1 anytime to Pause");
 
             int totalSeconds = s.duration;
@@ -33,39 +33,50 @@ public class MusicService {
                 Thread.sleep(1000);
                 elapsedSeconds++;
 
-                // Check for pause request
+                // Pause detection
                 if (System.in.available() > 0) {
                     String input = sc.nextLine();
 
                     if ("1".equals(input)) {
-                        // PAUSED
-                        System.out.println("\nPaused");
+
+                        System.out.println("\n⏸ Paused");
                         int action = pausedMenu(sc);
 
                         switch (action) {
-                            case 1 -> {
-                                System.out.println("Resumed");
-                            }
+
+                            case 1 -> System.out.println("▶ Resumed");
+
                             case 2 -> {
-                                Integer nextSongId = dao.getNextSongId(currentSongId);
+                                Integer nextSongId =
+                                        dao.getNextSongId(currentSongId);
+
+                                dao.recordPlay(currentSongId, userId);
+
                                 if (nextSongId == null) {
                                     System.out.println("No next song available");
-                                    dao.recordPlay(currentSongId, userId);
                                     return;
                                 }
-                                dao.recordPlay(currentSongId, userId);
+
+                                System.out.println("Skipped to next song");
                                 currentSongId = nextSongId;
                                 elapsedSeconds = 0;
                                 continue;
                             }
+
                             case 3 -> {
                                 System.out.println("Replaying");
                                 elapsedSeconds = 0;
                             }
-                            case 4 -> {
+
+                            case 4 -> dao.addToFavorites(userId, currentSongId);
+
+                            case 5 -> {
                                 dao.recordPlay(currentSongId, userId);
+                                System.out.println("Stopped");
                                 return;
                             }
+
+                            default -> System.out.println("Invalid option");
                         }
                     }
                 }
@@ -79,25 +90,25 @@ public class MusicService {
             if (nextSongId == null) {
                 return;
             }
+
             currentSongId = nextSongId;
         }
     }
 
     // ================= PAUSE MENU =================
-
     private int pausedMenu(Scanner sc) {
         System.out.println("""
                 1. Resume
                 2. Skip
                 3. Repeat
-                4. Stop
+                4. Add to Favorites
+                5. Stop
                 """);
         System.out.print("Choose option: ");
         return Integer.parseInt(sc.nextLine());
     }
 
     // ================= PROGRESS BAR =================
-
     private void printProgress(int elapsed, int total) {
 
         int barLength = 20;

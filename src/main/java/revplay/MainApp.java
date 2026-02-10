@@ -3,6 +3,8 @@ package revplay;
 import model.User;
 import service.*;
 import dao.SongDAO;
+import dao.ArtistDAO;
+import dao.AlbumDAO;
 
 import java.util.Scanner;
 
@@ -16,7 +18,7 @@ public class MainApp {
         PlaylistService playlist = new PlaylistService();
 
         while (true) {
-            System.out.println("\nREVPLAY ");
+            System.out.println("\nREVPLAY");
             System.out.println("1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
@@ -38,30 +40,49 @@ public class MainApp {
                 if (user.role.equals("LISTENER")) {
 
                     SongDAO songDAO = new SongDAO();
+                    AlbumDAO albumDAO = new AlbumDAO();
+                    boolean loggedIn = true;
 
-                    while (true) {
+                    while (loggedIn) {
                         System.out.println("\nListener Menu");
                         System.out.println("1. View Songs");
-                        System.out.println("2. Play Song");
-                        System.out.println("3. Modify Playlists");
-                        System.out.println("4. Logout");
+                        System.out.println("2. View Albums");
+                        System.out.println("3. View Songs in Album");
+                        System.out.println("4. Play Song");
+                        System.out.println("5. Modify Playlists");
+                        System.out.println("6. View Favorites");
+                        System.out.println("7. View Listening History");
+                        System.out.println("8. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
                         switch (c) {
+
                             case 1 -> songDAO.listAllSongs();
 
-                            case 2 -> {
+                            case 2 -> albumDAO.listAllAlbums();
+
+                            case 3 -> {
+                                System.out.print("Enter Album ID: ");
+                                int albumId = Integer.parseInt(sc.nextLine());
+                                songDAO.listSongsByAlbum(albumId);
+                            }
+
+                            case 4 -> {
                                 System.out.print("Enter Song ID: ");
                                 int songId = Integer.parseInt(sc.nextLine());
                                 music.play(songId, user.id, sc);
                             }
 
-                            case 3 -> playlistMenu(sc, playlist, user.id);
+                            case 5 -> playlistMenu(sc, playlist, user.id);
 
-                            case 4 -> {
+                            case 6 -> songDAO.viewFavorites(user.id);
+
+                            case 7 -> songDAO.viewListeningHistory(user.id);
+
+                            case 8 -> {
                                 System.out.println("Logged out");
-                                break;
+                                loggedIn = false;
                             }
 
                             default -> System.out.println("Invalid option");
@@ -69,43 +90,85 @@ public class MainApp {
                     }
                 }
 
+
                 /* ================= ARTIST ================= */
                 else if (user.role.equals("ARTIST")) {
 
                     SongDAO songDAO = new SongDAO();
+                    ArtistDAO artistDAO = new ArtistDAO();
+                    AlbumDAO albumDAO = new AlbumDAO();
 
-                    while (true) {
+                    boolean loggedIn = true;
+
+                    while (loggedIn) {
                         System.out.println("\nArtist Menu");
-                        System.out.println("1. Upload Song");
-                        System.out.println("2. View My Songs");
-                        System.out.println("3. Logout");
+                        System.out.println("1. Create Album");
+                        System.out.println("2. View My Albums");
+                        System.out.println("3. Add Song to Album");
+                        System.out.println("4. View My Songs");
+                        System.out.println("5. View My Profile");
+                        System.out.println("6. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
-                        if (c == 1) {
-                            System.out.print("Song Title: ");
-                            String title = sc.nextLine();
+                        switch (c) {
+                            case 1 -> {
+                                System.out.print("Album Title: ");
+                                String albumTitle = sc.nextLine();
+                                albumDAO.createAlbum(user.id, albumTitle);
+                            }
 
-                            System.out.print("Duration (seconds): ");
-                            int duration = Integer.parseInt(sc.nextLine());
 
-                            songDAO.uploadSong(user.id, title, duration);
-                            System.out.println("Song uploaded successfully");
-                        }
-                        else if (c == 2) {
-                            songDAO.listSongsByArtist(user.id);
-                        }
-                        else {
-                            System.out.println("Logged out");
-                            break;
+                            case 2 -> albumDAO.listAlbumsByArtist(user.id);
+
+
+                            case 3 -> {
+                                System.out.print("Song Title: ");
+                                String title = sc.nextLine();
+
+                                System.out.print("Duration (seconds): ");
+                                int duration = Integer.parseInt(sc.nextLine());
+
+                                System.out.println("\nSelect an Album:");
+                                albumDAO.listAlbumsByArtist(user.id);
+
+                                System.out.print("Album ID (0 for no album): ");
+                                int albumId = Integer.parseInt(sc.nextLine());
+
+                                songDAO.uploadSong(
+                                        user.id,
+                                        title,
+                                        duration,
+                                        albumId == 0 ? null : albumId
+                                );
+
+                                System.out.println("Song added to album");
+                            }
+
+
+                            case 4 -> songDAO.listSongsByArtist(user.id);
+
+                            case 5 -> artistDAO.viewProfile(user.id);
+
+                            case 6 -> {
+                                System.out.println("Logged out");
+                                loggedIn = false;
+                            }
+
+                            default -> System.out.println("Invalid option");
                         }
                     }
                 }
+
+
             }
             else {
+                System.out.println("Goodbye");
                 break;
             }
         }
+
+        sc.close();
     }
 
     /* ================= PLAYLIST SUB-MENU ================= */
