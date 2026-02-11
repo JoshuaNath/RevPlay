@@ -317,4 +317,46 @@ public class SongDAO {
             }
         }
     }
+
+    // ================= SEARCH SONGS =================
+    public void searchSongs(String keyword) throws Exception {
+
+        String sql = """
+        SELECT id, title, duration_seconds
+        FROM songs
+        WHERE LOWER(title) LIKE ?
+        ORDER BY title
+    """;
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword.toLowerCase() + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n🔍 Search Results:");
+            boolean found = false;
+
+            while (rs.next()) {
+                found = true;
+
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                int duration = rs.getInt("duration_seconds");
+
+                int min = duration / 60;
+                int sec = duration % 60;
+
+                System.out.printf(
+                        "%d - %s (%02d:%02d)%n",
+                        id, title, min, sec
+                );
+            }
+
+            if (!found) {
+                System.out.println("No songs found.");
+            }
+        }
+    }
 }

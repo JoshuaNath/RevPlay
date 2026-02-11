@@ -11,32 +11,81 @@ public class AuthService {
 
     // ================= REGISTER =================
     public void register(Scanner sc) throws Exception {
+
         System.out.println("1. Listener  2. Artist");
         int choice = Integer.parseInt(sc.nextLine());
+
         System.out.print("Username: ");
-        String u = sc.nextLine();
+        String username = sc.nextLine();
+
         System.out.print("Password: ");
-        String p = sc.nextLine();
+        String password = sc.nextLine();
+
         System.out.print("Email: ");
-        String e = sc.nextLine();
+        String email = sc.nextLine();
+
         System.out.print("Full Name: ");
-        String n = sc.nextLine();
+        String fullName = sc.nextLine();
+
         System.out.print("Security Question: ");
-        String q = sc.nextLine();
+        String securityQuestion = sc.nextLine();
+
         System.out.print("Security Answer: ");
-        String a = sc.nextLine();
+        String securityAnswer = sc.nextLine();
+
         if (choice == 1) {
-            dao.registerListener(u, p, e, n, q, a);
+
+            dao.registerListener(
+                    username,
+                    password,
+                    email,
+                    fullName,
+                    securityQuestion,
+                    securityAnswer
+            );
+
         } else {
+
             System.out.print("Artist Name: ");
             String artistName = sc.nextLine();
+
             System.out.print("Genre: ");
             String genre = sc.nextLine();
 
-            dao.registerArtist(u, p, e, n, artistName, genre, q, a);
+            System.out.print("Do you want to disclose your social media accounts? (yes/no): ");
+            String choiceSM = sc.nextLine();
+
+            boolean disclose = choiceSM.equalsIgnoreCase("yes");
+
+            String instagram = null;
+            String youtube = null;
+
+            if (disclose) {
+                System.out.print("Instagram ID: ");
+                instagram = sc.nextLine();
+
+                System.out.print("YouTube Channel: ");
+                youtube = sc.nextLine();
+            }
+
+            dao.registerArtist(
+                    username,
+                    password,
+                    email,
+                    fullName,
+                    securityQuestion,
+                    securityAnswer,
+                    artistName,
+                    genre,
+                    disclose,
+                    instagram,
+                    youtube
+            );
         }
+
         System.out.println("Registration successful");
     }
+
 
     // ================= LOGIN =================
     public User login(Scanner sc) throws Exception {

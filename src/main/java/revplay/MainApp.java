@@ -41,6 +41,8 @@ public class MainApp {
 
                     SongDAO songDAO = new SongDAO();
                     AlbumDAO albumDAO = new AlbumDAO();
+                    ArtistDAO artistDAO = new ArtistDAO();
+
                     boolean loggedIn = true;
 
                     while (loggedIn) {
@@ -49,16 +51,28 @@ public class MainApp {
                         System.out.println("2. View Albums");
                         System.out.println("3. View Songs in Album");
                         System.out.println("4. Play Song");
-                        System.out.println("5. Modify Playlists");
-                        System.out.println("6. View Favorites");
-                        System.out.println("7. View Listening History");
-                        System.out.println("8. Logout");
+                        System.out.println("5. Search Songs");
+                        System.out.println("6. Modify Playlists");
+                        System.out.println("7. View Favorites");
+                        System.out.println("8. View Listening History");
+                        System.out.println("9. View Artist Profile");
+                        System.out.println("10. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
                         switch (c) {
 
-                            case 1 -> songDAO.listAllSongs();
+                            case 1 -> {
+                                songDAO.listAllSongs();
+
+                                System.out.print("\nEnter Song ID to play (0 to cancel): ");
+                                int selected = Integer.parseInt(sc.nextLine());
+
+                                if (selected != 0) {
+                                    music.play(selected, user.id, sc);
+                                }
+                            }
+
 
                             case 2 -> albumDAO.listAllAlbums();
 
@@ -74,13 +88,40 @@ public class MainApp {
                                 music.play(songId, user.id, sc);
                             }
 
-                            case 5 -> playlistMenu(sc, playlist, user.id);
+                            case 5 -> {
+                                System.out.print("Enter search keyword: ");
+                                String keyword = sc.nextLine();
 
-                            case 6 -> songDAO.viewFavorites(user.id);
+                                songDAO.searchSongs(keyword);
 
-                            case 7 -> songDAO.viewListeningHistory(user.id);
+                                System.out.print("\nEnter Song ID to play (0 to cancel): ");
+                                int selected = Integer.parseInt(sc.nextLine());
 
-                            case 8 -> {
+                                if (selected != 0) {
+                                    music.play(selected, user.id, sc);
+                                }
+                            }
+
+                            case 6 -> playlistMenu(sc, playlist, user.id);
+
+                            case 7 -> songDAO.viewFavorites(user.id);
+
+                            case 8 -> songDAO.viewListeningHistory(user.id);
+
+                            case 9 -> {
+                                System.out.print("Enter Artist Username: ");
+                                String username = sc.nextLine();
+
+                                int artistId = artistDAO.getArtistIdByUsername(username);
+                                if (artistId == -1) {
+                                    System.out.println("Artist not found.");
+                                } else {
+                                    artistDAO.viewProfile(artistId);
+                                }
+                            }
+
+
+                            case 10 -> {
                                 System.out.println("Logged out");
                                 loggedIn = false;
                             }
@@ -107,7 +148,8 @@ public class MainApp {
                         System.out.println("3. Add Song to Album");
                         System.out.println("4. View My Songs");
                         System.out.println("5. View My Profile");
-                        System.out.println("6. Logout");
+                        System.out.println("6. View Song Stats");
+                        System.out.println("7. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
@@ -151,6 +193,13 @@ public class MainApp {
                             case 5 -> artistDAO.viewProfile(user.id);
 
                             case 6 -> {
+                                System.out.print("Enter Song ID: ");
+                                int songId = Integer.parseInt(sc.nextLine());
+                                artistDAO.viewSongStats(user.id, songId);
+                            }
+
+
+                            case 7 -> {
                                 System.out.println("Logged out");
                                 loggedIn = false;
                             }

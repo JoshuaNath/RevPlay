@@ -47,21 +47,31 @@ public class MusicService {
                             case 1 -> System.out.println("▶ Resumed");
 
                             case 2 -> {
-                                Integer nextSongId =
-                                        dao.getNextSongId(currentSongId);
 
-                                dao.recordPlay(currentSongId, userId);
+                                Integer nextSongId = dao.getNextSongId(currentSongId);
 
                                 if (nextSongId == null) {
                                     System.out.println("No next song available");
+                                    dao.recordPlay(currentSongId, userId);
                                     return;
                                 }
 
-                                System.out.println("Skipped to next song");
+                                // Record current song play
+                                dao.recordPlay(currentSongId, userId);
+
+                                // Get next song details immediately
+                                Song nextSong = dao.getSong(nextSongId);
+
+                                System.out.println("\n⏭ Skipped");
+                                System.out.println("🎵 Now Playing: " + nextSong.title);
+
                                 currentSongId = nextSongId;
                                 elapsedSeconds = 0;
-                                continue;
+
+                                break;
                             }
+
+
 
                             case 3 -> {
                                 System.out.println("Replaying");
