@@ -42,7 +42,7 @@ public class ArtistDAO {
             String genre = rsProfile.getString("genre");
             int disclose = rsProfile.getInt("disclose_social");
 
-            System.out.println("\n🎤 Artist Profile");
+            System.out.println("\nArtist Profile");
             System.out.println("Name  : " + name);
             System.out.println("Genre : " + genre);
 
@@ -133,14 +133,14 @@ public class ArtistDAO {
             ResultSet rsValidate = psValidate.executeQuery();
 
             if (!rsValidate.next()) {
-                System.out.println("❌ Song not found or does not belong to you.");
+                System.out.println("Song not found or does not belong to you.");
                 return;
             }
 
             String title = rsValidate.getString("title");
             int totalPlays = rsValidate.getInt("play_count");
 
-            System.out.println("\n📊 Song Statistics");
+            System.out.println("\nSong Statistics");
             System.out.println("Song Name     : " + title);
             System.out.println("Total Plays   : " + totalPlays);
 

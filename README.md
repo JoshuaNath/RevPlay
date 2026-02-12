@@ -1,160 +1,159 @@
-**RevPlay – Console-Based Music Streaming Application**
-**Overview:**
+# 🎵 RevPlay – Console-Based Music & Podcast Streaming Platform
 
-RevPlay is a full-featured, console-based music streaming system built using Java 17, JDBC, Oracle PL/SQL, Maven, JUnit, Log4J, and Git.
+## 🚀 Overview
 
-The application simulates a real-world streaming platform with role-based access (Listener & Artist), music playback simulation, playlist management, analytics, and privacy controls — all implemented using a clean layered architecture.
+RevPlay is a fully functional console-based music and podcast streaming application built using:
 
-This project demonstrates backend system design, relational database modeling, and production-style feature implementation within a compact codebase.
+- Java 17
+- JDBC
+- Oracle PL/SQL
+- Maven
+- JUnit
+- Log4J
+- Git
 
-**Architecture:**
-RevPlay follows a layered architecture:
-Presentation Layer – Console UI (MainApp)
-Service Layer – Business logic (AuthService, MusicService, PlaylistService)
-DAO Layer – Database interaction via JDBC
-Database Layer – Oracle SQL + PL/SQL procedures
+The system follows a layered architecture and demonstrates real-world backend design concepts including authentication, role-based access control, relational database modeling, analytics tracking, and interactive playback simulation.
 
-This separation ensures:
-Clean code organization
-Maintainability
-Scalability toward future web or microservice extension
+---
 
-**User Roles & Features:**
-**Listener:**
-Listeners can:
-Register and login with security question validation
-Search songs (partial & case-insensitive matching)
-Browse songs, albums, and artists
-Play songs with:
-    Progress bar (MM:SS format)
-    Pause, Skip, Repeat, Stop
-    Add to Favorites while playing
-View listening history (timestamped)
-Create and manage playlists
-View public playlists
-View artist profiles
-View favorite songs
+## 🎯 Core Features
 
-**Artist:**
-Artists can:
-Register with optional social media disclosure
-Create albums
-Add songs to albums
-Upload standalone songs
-View their profile (visible to listeners)
-View uploaded songs
-View analytics per song including:
-    Total play count
-    Top listener
-    Most played day
-    Favorite count
+### 👂 Listener Features
+- User registration & login (with security question validation)
+- Search songs dynamically (keyword-based)
+- Browse songs, albums, artists
+- Play music with:
+    - Progress bar
+    - Pause / Resume
+    - Skip
+    - Repeat
+    - Stop
+- Add songs to favorites
+- View listening history (timestamped)
+- Create & manage playlists (public/private)
+- Explore and play podcasts
+- View artist profiles
 
-Artist privacy is handled using a social media disclosure flag, allowing optional Instagram/YouTube visibility.
+---
 
-**Music Playback Simulation:**
-The system includes a text-based music player with:
-Real-time progress bar
-Duration tracking
-Skip to next song
-Replay functionality
-Favorite integration
-Listening history tracking
-Automatic analytics updates
+### 🎤 Artist Features
+- Artist registration with optional social media disclosure
+- Create albums
+- Upload songs into albums
+- Create podcasts
+- Upload podcast episodes
+- View profile with:
+    - Total songs
+    - Total duration
+    - Genre
+    - Social media info
+- View detailed song analytics:
+    - Play count
+    - Most active listener
+    - Most played day
+    - Favorite count
 
-Playback interactions update:
-play_count
-listening_history
-Favorites table
-Artist statistics
+---
 
-**Database Design:**
-The system uses a normalized relational schema including:
-USERS (base authentication table)
-LISTENERS (role extension)
-ARTISTS (role extension)
-ALBUMS
-SONGS
-PLAYLISTS
-PLAYLIST_SONGS (many-to-many)
-FAVORITES (many-to-many)
-LISTENING_HISTORY (analytics & tracking)
+## 🏗 Architecture
 
-The design supports:
-Role-based modeling
-Album-song hierarchy
-Playlist relationships
-Real-time analytics
-Privacy controls
-Data integrity via primary & foreign keys
+RevPlay follows a modular layered design:
 
-**Analytics Features:**
-RevPlay computes real-time analytics using SQL aggregation:
-Total plays per song
-Most active listener
-Most played day
-Favorite count
-Artist-level performance metrics
+- Presentation Layer (Console UI)
+- Service Layer (Business Logic)
+- DAO Layer (Database Access)
+- Database Layer (Oracle SQL + PL/SQL)
 
-This demonstrates practical use of:
-GROUP BY
-COUNT
-ORDER BY
-PL/SQL procedures
+The architecture ensures separation of concerns and future extensibility to web or microservices architecture.
 
-**Technology Stack:**
-Layer	            Technology
-Language	        Java 17
-Database	        Oracle SQL
-Persistence	        JDBC
-Procedures	        PL/SQL
-Build Tool	        Maven
-Testing	            JUnit 5
-Logging	            Log4J
-Version Control	    Git
+---
 
-**Key Design Principles Demonstrated:**
-Layered architecture
-Role-based system design
-Database normalization
-Many-to-many relationships
-Analytics-driven queries
-Privacy-aware feature modeling
-Clean separation of concerns
-Interview-ready system modeling
+## 🗄 Database Design
 
-**Project Highlights:**
-✔ Full authentication system
-✔ Security question validation
-✔ Album-based song organization
-✔ Playlist management
-✔ Search functionality
-✔ Music playback simulation
-✔ Favorites system
-✔ Listening history tracking
-✔ Song analytics
-✔ Social media privacy control
+The system uses a normalized relational database with:
 
-**Why This Project Stands Out:**
-RevPlay goes beyond simple CRUD operations and demonstrates:
-Real-world relational database modeling
-Feature-rich backend logic
-Analytics computation
-User interaction simulation
-Extendable architecture
-Production-style modular design
+- Users (Listener / Artist roles)
+- Songs & Albums
+- Playlists
+- Favorites
+- Listening History
+- Podcasts & Episodes
+- Podcast History
 
-This project is designed to be:
-Easily explainable in technical interviews
-Extendable into a web or microservice architecture
-A strong demonstration of backend engineering fundamentals
+Foreign key constraints and junction tables are used to maintain data integrity.
 
-**Future Enhancements:**
-Trending songs section
-Artist follower system
-Revenue simulation
-Advanced search (genre, album, artist)
-REST API conversion
-Microservice architecture migration
+---
 
- **Author:**
-Developed as a backend-focused, system-design-oriented project to demonstrate practical database integration, Java application architecture, and feature-rich console interaction.
+## 🎵 Playback Engine
+
+RevPlay includes a fully simulated playback engine featuring:
+
+- Real-time progress bar (MM:SS format)
+- Interactive pause menu
+- Skip to next track
+- Repeat
+- Add to favorites while playing
+- Automatic next track playback
+
+The same engine is reused for podcast episodes.
+
+---
+
+## 📊 Analytics
+
+Artists can view advanced analytics for their songs:
+
+- Total plays
+- Most active listener
+- Most played day
+- Favorite count
+
+This demonstrates practical database aggregation queries and reporting.
+
+---
+
+## 🧪 Testing
+
+JUnit test cases validate:
+
+- User registration
+- Artist registration
+- Security question storage
+- Authentication logic
+- Database consistency
+
+---
+
+## 💡 Design Highlights
+
+- Clean layered architecture
+- Proper DAO separation
+- Role-based menu flow
+- Scalable ER design
+- Extensible podcast module
+- Minimal Java file structure (≤ 20 files)
+- Professional CLI UX
+
+---
+
+## 🔮 Future Improvements
+
+- Recommendation engine
+- Subscription tiers
+- Trending charts
+- Microservices refactor
+- REST API version
+- Web UI integration
+
+---
+
+## 🎓 Project Purpose
+
+RevPlay demonstrates backend system design principles in a real-world streaming application scenario.  
+It showcases database modeling, layered architecture, analytics implementation, and interactive CLI UX simulation.
+
+---
+
+## 🏁 Conclusion
+
+RevPlay is a complete, scalable, and extensible streaming backend simulation that mirrors core functionality found in real-world platforms like Spotify and Apple Music — built entirely as a console-based Java application.

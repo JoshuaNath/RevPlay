@@ -1,5 +1,6 @@
 package revplay;
 
+import dao.PodcastDAO;
 import model.User;
 import service.*;
 import dao.SongDAO;
@@ -16,9 +17,23 @@ public class MainApp {
         AuthService auth = new AuthService();
         MusicService music = new MusicService();
         PlaylistService playlist = new PlaylistService();
+        PodcastDAO podcastDAO = new PodcastDAO();
+
 
         while (true) {
-            System.out.println("\nREVPLAY");
+            System.out.println("""
+==============================================================
+██████╗ ███████╗██╗   ██╗██████╗ ██╗      █████╗ ██╗   ██╗
+██╔══██╗██╔════╝██║   ██║██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+██████╔╝█████╗  ██║   ██║██████╔╝██║     ███████║ ╚████╔╝ 
+██╔══██╗██╔══╝  ╚██╗ ██╔╝██╔═══╝ ██║     ██╔══██║  ╚██╔╝  
+██║  ██║███████╗ ╚████╔╝ ██║     ███████╗██║  ██║   ██║   
+╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   
+
+           Your Personal Music & Podcast Studio 
+==============================================================
+""");
+
             System.out.println("1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
@@ -56,7 +71,9 @@ public class MainApp {
                         System.out.println("7. View Favorites");
                         System.out.println("8. View Listening History");
                         System.out.println("9. View Artist Profile");
-                        System.out.println("10. Logout");
+                        System.out.println("10. View Podcasts");
+                        System.out.println("11. Play Podcast Episode");
+                        System.out.println("12. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
@@ -120,8 +137,25 @@ public class MainApp {
                                 }
                             }
 
+                            case 10 -> podcastDAO.listAllPodcasts();
 
-                            case 10 -> {
+                            case 11 -> {
+                                podcastDAO.listAllPodcasts();
+
+                                System.out.print("Enter Podcast ID: ");
+                                int pid = Integer.parseInt(sc.nextLine());
+
+                                podcastDAO.listEpisodes(pid);
+
+                                System.out.print("Enter Episode ID to play: ");
+                                int eid = Integer.parseInt(sc.nextLine());
+
+                                music.playPodcastEpisode(eid, user.id, sc);
+                            }
+
+
+
+                            case 12 -> {
                                 System.out.println("Logged out");
                                 loggedIn = false;
                             }
@@ -149,7 +183,11 @@ public class MainApp {
                         System.out.println("4. View My Songs");
                         System.out.println("5. View My Profile");
                         System.out.println("6. View Song Stats");
-                        System.out.println("7. Logout");
+                        System.out.println("7. Create Podcast");
+                        System.out.println("8. Add Podcast Episode");
+                        System.out.println("9. View my Podcasts");
+                        System.out.println("10. View Podcast Episodes");
+                        System.out.println("11. Logout");
 
                         int c = Integer.parseInt(sc.nextLine());
 
@@ -198,8 +236,46 @@ public class MainApp {
                                 artistDAO.viewSongStats(user.id, songId);
                             }
 
-
                             case 7 -> {
+                                System.out.print("Podcast Title: ");
+                                String title = sc.nextLine();
+
+                                System.out.print("Description: ");
+                                String desc = sc.nextLine();
+
+                                podcastDAO.createPodcast(user.id, title, desc);
+                                System.out.println("Podcast created successfully");
+                            }
+
+                            case 8 -> {
+                                podcastDAO.listAllPodcasts();
+
+                                System.out.print("Podcast ID: ");
+                                int pid = Integer.parseInt(sc.nextLine());
+
+                                System.out.print("Episode Title: ");
+                                String et = sc.nextLine();
+
+                                System.out.print("Duration (seconds): ");
+                                int dur = Integer.parseInt(sc.nextLine());
+
+                                podcastDAO.addEpisode(pid, et, dur);
+                                System.out.println("Episode added");
+                            }
+
+                            case 9 -> podcastDAO.listAllPodcasts();
+
+
+                            case 10 -> {
+                                podcastDAO.listPodcastsByArtist(user.id);
+
+                                System.out.print("Enter Podcast ID: ");
+                                int pid = Integer.parseInt(sc.nextLine());
+
+                                podcastDAO.listEpisodes(pid);
+                            }
+
+                            case 11 -> {
                                 System.out.println("Logged out");
                                 loggedIn = false;
                             }
